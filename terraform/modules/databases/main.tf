@@ -1,7 +1,5 @@
 
-resource "aws_security_group" "allow_my_ip_address" {
-  name = "allow_my_public_ip_address"
-  description = "Allow TCP inbound traffic and all outbound traffic"
+resource "aws_security_group" "allow_my_ip" {
   vpc_id = var.default_vpc_id
 
   ingress {
@@ -19,6 +17,7 @@ resource "aws_security_group" "allow_my_ip_address" {
   }
 }
 
+
 resource "aws_db_instance" "employee_db" {
   allocated_storage = 5
   identifier = "employeedatabase"
@@ -28,7 +27,7 @@ resource "aws_db_instance" "employee_db" {
   password = var.employee_db_password
   skip_final_snapshot = true // required to destroy
 
-  vpc_security_group_ids = [aws_security_group.allow_my_ip_address.id]
+  vpc_security_group_ids = [aws_security_group.allow_my_ip.id]
   publicly_accessible = true
 }
 
