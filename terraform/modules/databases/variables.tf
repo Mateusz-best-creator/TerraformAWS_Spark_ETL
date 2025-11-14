@@ -1,14 +1,14 @@
 
 
-variable "employee_db_password" {
+variable "company_db_password" {
     type = string
-    description = "Password to access database where we store employee data."
+    description = "Password to access database where we store company data."
     default = "Andrzej2004!"
 }
 
-variable "employee_db_username" {
+variable "company_db_username" {
     type = string
-    description = "Username for employee database."
+    description = "Username for company database."
     default = "admin"
 }
 

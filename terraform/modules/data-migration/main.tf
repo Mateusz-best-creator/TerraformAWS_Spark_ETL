@@ -33,3 +33,12 @@ resource "aws_iam_role_policy" "AmazonS3WriteRoleAttachement" {
     }]
   })
 }
+
+# resource "aws_dms_replication_instance" "example" {
+#   replication_instance_id   = "dms-instance"
+#   replication_instance_class = "dms.t3.micro"
+#   allocated_storage         = 10
+#   publicly_accessible       = false
+#   # vpc_security_group_ids     = [...] # same as RDS
+#   # replication_subnet_group_id = aws_dms_replication_subnet_group.example.id
+# }
