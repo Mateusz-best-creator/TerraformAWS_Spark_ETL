@@ -43,7 +43,7 @@ module "databases_solution" {
 
   default_vpc_id = data.aws_vpc.default.id
   # default_vpc_subnets = data.aws_subnets.default.ids
-} 
+}
 
 module "data_migration_solution" {
   source = "./modules/data-migration"
@@ -54,5 +54,6 @@ module "data_migration_solution" {
 module "emr_cluster" {
   source = "./modules/emr"
 
+  s3_bronze_arn = module.data_lake_solution.s3_bronze_arn
   s3_silver_arn = module.data_lake_solution.s3_silver_arn
 }

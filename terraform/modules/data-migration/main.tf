@@ -19,17 +19,17 @@ EOF
 }
 
 resource "aws_iam_role_policy" "AmazonS3WriteRoleAttachement" {
-  role       = aws_iam_role.AmazonS3WriteRole.name
+  role = aws_iam_role.AmazonS3WriteRole.name
 
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [{
-    Effect   = "Allow",
-    Action   = ["s3:PutObject", "s3:ListBucket"],
-    Resource = [
+      Effect = "Allow",
+      Action = ["s3:PutObject", "s3:ListBucket"],
+      Resource = [
         var.s3_bronze_arn,
         "${var.s3_bronze_arn}/*" # All objects inside
-    ]
+      ]
     }]
   })
 }

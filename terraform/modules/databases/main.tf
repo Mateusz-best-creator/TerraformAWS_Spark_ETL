@@ -19,15 +19,15 @@ resource "aws_security_group" "allow_my_ip" {
 
 
 resource "aws_db_instance" "company_db" {
-  allocated_storage = 5
-  identifier = "companydatabase"
-  engine = "mysql"
-  instance_class = "db.t3.micro"
-  username = var.company_db_username
-  password = var.company_db_password
+  allocated_storage   = 5
+  identifier          = "companydatabase"
+  engine              = "mysql"
+  instance_class      = "db.t3.micro"
+  username            = var.company_db_username
+  password            = var.company_db_password
   skip_final_snapshot = true // required to destroy
 
   vpc_security_group_ids = [aws_security_group.allow_my_ip.id]
-  publicly_accessible = true
+  publicly_accessible    = true
 }
 
