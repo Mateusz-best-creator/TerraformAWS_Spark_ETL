@@ -15,30 +15,30 @@ class ETL:
     def extract(self):
         self.hotels_df = spark.read.csv(self.hotels_dataset_path, header=True)
         self.weather_df = spark.read.parquet(self.weather_dataset_path)
-        self.hotels_df.show(5)
-        self.weather_df.show(5)
 
     def transform(self):
         transformations = Transformations()
-        transformations.fill_missing_values(self.weather_df,
-                                            {"lng": "Delete",
-                                             "lat": "Delete",
-                                             "avg_tmpr_f": "Median",
-                                             "avg_tmpr_c": "Median",
-                                             "wthr_date": "Delete",
-                                             "year": "Median",
-                                             "month": "Median",
-                                             "day": "Median"})
-        transformations.fill_missing_values(self.hotels_df,
-                                            {"Id": "Mean",
-                                             "Name": "Delete",
-                                             "Country": "Mode",
-                                             "City": "Mode",
-                                             "Address": "Delete",
-                                             "Latitude": "Median",
-                                             "Longitude": "Median"})
-        transformations.add_geohash(self.weather_df)
-        transformations.add_geohash(self.hotels_df)
+        self.weather_df = transformations.fill_missing_values(self.weather_df,
+                                                            {"lng": "Delete",
+                                                            "lat": "Delete",
+                                                            "avg_tmpr_f": "Median",
+                                                            "avg_tmpr_c": "Median",
+                                                            "wthr_date": "Delete",
+                                                            "year": "Median",
+                                                            "month": "Median",
+                                                            "day": "Median"})
+        self.hotels_df = transformations.fill_missing_values(self.hotels_df,
+                                                            {"Id": "Mean",
+                                                            "Name": "Delete",
+                                                            "Country": "Mode",
+                                                            "City": "Mode",
+                                                            "Address": "Delete",
+                                                            "Latitude": "Median",
+                                                            "Longitude": "Median"})
+        self.weather_df = transformations.add_geohash(self.weather_df)
+        self.hotels_df = transformations.add_geohash(self.hotels_df)
+        self.hotels_df.show(5)
+        self.weather_df.show(5)
 
     def load(self):
         pass

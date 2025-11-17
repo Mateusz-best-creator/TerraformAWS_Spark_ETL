@@ -296,3 +296,5 @@ spark-warehouse/
 
 Spark/hotels
 Spark/weather
+
+*.env
