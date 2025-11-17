@@ -35,6 +35,7 @@ module "data_lake_solution" {
   source = "./modules/data-lake"
 
   s3_bronze_name = var.s3_bronze_bucket_name
+  s3_silver_name = var.s3_silver_bucket_name
 }
 
 module "databases_solution" {
@@ -48,4 +49,10 @@ module "data_migration_solution" {
   source = "./modules/data-migration"
 
   s3_bronze_arn = module.data_lake_solution.s3_bronze_arn
+}
+
+module "emr_cluster" {
+  source = "./modules/emr"
+
+  s3_silver_arn = module.data_lake_solution.s3_silver_arn
 }

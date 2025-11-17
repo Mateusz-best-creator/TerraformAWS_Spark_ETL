@@ -14,3 +14,8 @@ variable "s3_bronze_bucket_name" {
   type    = string
   default = "bronze-u3ra6oa"
 }
+
+variable "s3_silver_bucket_name" {
+  type    = string
+  default = "silver-u3b9rvg"
+}

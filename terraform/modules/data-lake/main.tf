@@ -20,7 +20,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_laye
         }
 
         expiration {
-            days = 100
+            days = 365
         }
 
         transition {
@@ -29,7 +29,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_laye
         }
 
         transition {
-            days = 50
+            days = 100
             storage_class = "DEEP_ARCHIVE"
         }
 
@@ -46,7 +46,7 @@ resource "aws_s3_bucket" "s3_silver_bucket" {
     }
 }
 
-resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_layer" {
+resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_silver_layer" {
     bucket = aws_s3_bucket.s3_silver_bucket.id
 
     rule {
@@ -58,7 +58,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_laye
         }
 
         expiration {
-            days = 100
+            days = 365
         }
 
         transition {
@@ -67,7 +67,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_laye
         }
 
         transition {
-            days = 50
+            days = 100
             storage_class = "DEEP_ARCHIVE"
         }
 
