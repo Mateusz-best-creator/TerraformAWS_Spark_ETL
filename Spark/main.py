@@ -1,6 +1,7 @@
 from pyspark.sql import SparkSession
 from transformations import Transformations
 from typing import Literal
+from encryption import Encrpytion
 
 class ETL:
 
@@ -47,6 +48,15 @@ class ETL:
         self.weather_df.show(5)
         print(f"\n\n\nStarting grouping transformations\n\n\n")
         self.weather_df = transformations.group_weather_dataset(self.weather_df)
+        self.hotels_df.show(5)
+        self.weather_df.show(5)
+
+        encyption_class = Encrpytion()
+        self.hotels_df = encyption_class.encrypt_data(self.hotels_df,
+                                                      ["Name", "Country", "City", "Address", "Latitude", "Longitude"])
+        self.weather_df = encryption_class.encrypt_data(self.weather_df,
+                                                        ["lng", "lat"])
+        print(f"\n\nAfter encryption:\n\n")
         self.hotels_df.show(5)
         self.weather_df.show(5)
 
