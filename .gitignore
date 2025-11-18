@@ -297,4 +297,5 @@ spark-warehouse/
 Spark/hotels
 Spark/weather
 
-*.env
+*.
+cleaned_data

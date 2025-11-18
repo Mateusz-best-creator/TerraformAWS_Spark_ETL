@@ -1,6 +1,6 @@
 from typing import Dict
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, median, mean, mode, udf
+from pyspark.sql.functions import col, median, mean, mode, udf, max
 from geocode import GeocodeAPI
 from pyspark.sql.types import StringType
 
@@ -55,4 +55,20 @@ class Transformations:
             geocode_udf = udf(self.geocode_row_using_lat_lon, StringType())
             df = df.withColumn(self.geohash_column_name,
                                geocode_udf(col("lat"), col("lng")))
+        return df
+
+    def group_weather_dataset(self, df: DataFrame) -> DataFrame:
+        print(f"Before = {df.count()}")
+
+        df = df.groupBy("wthr_date", "GeoHash").agg(
+            mean("avg_tmpr_c").alias("avg_tmpr_c"),
+            mean("avg_tmpr_f").alias("avg_tmpr_f"),
+            # max("lng").alias("lng"),
+            # max("lat").alias("lat"),
+            # max("year").alias("year"),
+            # max("month").alias("month"),
+            # max("day").alias("day"),
+        )
+
+        print(f"After = {df.count()}")
         return df

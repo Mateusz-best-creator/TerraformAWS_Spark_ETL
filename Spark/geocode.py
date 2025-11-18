@@ -22,6 +22,5 @@ class GeocodeAPI:
     def get_geohash_from_lat_lon(self,
                                  latitude: float,
                                  longitude: float):
-        query = f'{latitude}, {longitude}'
-        results = self.geocoder.reverse_geocode(44.8303087, -0.5761911)
+        results = self.geocoder.reverse_geocode(latitude, longitude)
         return results[0]["annotations"]["geohash"][:self.geohash_precision]        
