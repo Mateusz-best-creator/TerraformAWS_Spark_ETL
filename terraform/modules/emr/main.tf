@@ -102,8 +102,8 @@ resource "aws_emr_cluster" "spark_cluster" {
   }
 
   core_instance_group {
-    # instance_type  = "c4.large"
-    instance_type  = "t2.micro"
+    instance_type  = "c4.large"
+    # instance_type  = "t2.micro"
     instance_count = 1
   }
 

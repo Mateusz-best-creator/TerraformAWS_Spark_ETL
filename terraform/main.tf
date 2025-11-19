@@ -51,9 +51,9 @@ module "data_migration_solution" {
   s3_bronze_arn = module.data_lake_solution.s3_bronze_arn
 }
 
-module "emr_cluster" {
-  source = "./modules/emr"
+# module "emr_cluster" {
+#   source = "./modules/emr"
 
-  s3_bronze_arn = module.data_lake_solution.s3_bronze_arn
-  s3_silver_arn = module.data_lake_solution.s3_silver_arn
-}
+#   s3_bronze_arn = module.data_lake_solution.s3_bronze_arn
+#   s3_silver_arn = module.data_lake_solution.s3_silver_arn
+# }

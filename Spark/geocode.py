@@ -17,10 +17,14 @@ class GeocodeAPI:
                                               country: str) -> str:
         query = f'{address}, {city}, {country}'
         results = self.geocoder.geocode(query)
+        if not results:
+            return "UNKNOWN"
         return results[0]["annotations"]["geohash"][:self.geohash_precision]
 
     def get_geohash_from_lat_lon(self,
                                  latitude: float,
                                  longitude: float):
         results = self.geocoder.reverse_geocode(latitude, longitude)
-        return results[0]["annotations"]["geohash"][:self.geohash_precision]        
+        if not results:
+            return "UNKNOWN"
+        return results[0]["annotations"]["geohash"][:self.geohash_precision]     

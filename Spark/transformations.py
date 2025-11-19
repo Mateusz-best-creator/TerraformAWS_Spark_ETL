@@ -1,6 +1,6 @@
 from typing import Dict
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col, median, mean, mode, udf, max
+from pyspark.sql.functions import col, median, mean, mode, udf, max, year, month, day
 from geocode import GeocodeAPI
 from pyspark.sql.types import StringType
 
@@ -34,6 +34,14 @@ class Transformations:
                 pass
         return df
 
+    def fill_year_month_day(self,
+                            df: DataFrame,
+                            date_column: str = "wthr_date") -> DataFrame:
+        df = df.withColumn("year", year(col(date_column)))
+        df = df.withColumn("month", month(col(date_column)))
+        df = df.withColumn("day", day(col(date_column)))
+        return df
+
     def geocode_row_using_address(self, 
                                   address: str, 
                                   city: str, 
@@ -55,6 +63,11 @@ class Transformations:
             geocode_udf = udf(self.geocode_row_using_lat_lon, StringType())
             df = df.withColumn(self.geohash_column_name,
                                geocode_udf(col("lat"), col("lng")))
+        return df
+
+    def filter_geohash(self,
+                       df: DataFrame) -> DataFrame:
+        df = df.filter(col(self.geohash_column_name) != "UNKNOWN")
         return df
 
     def group_weather_dataset(self, df: DataFrame) -> DataFrame:
