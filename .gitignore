@@ -300,3 +300,4 @@ Spark/weather
 *.
 cleaned_data
 temp.py
+*.jar

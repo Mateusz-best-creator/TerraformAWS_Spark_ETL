@@ -92,20 +92,33 @@ class ETL:
 
 if __name__ == "__main__":
 
+    load_dotenv(dotenv_path="../.env")
+    AWS_ACCESS_KEY = os.getenv("ACCESS_KEY")
+    AWS_SECRET_KEY = os.getenv("SECRET_ACCESS_KEY")
+    BRONZE_BUCKET_NAME = os.getenv("BRONZE_BUCKET_NAME")
+    SILVER_BUCKET_NAME = os.getenv("SILVER_BUCKET_NAME")
+
     spark = SparkSession.builder \
-        .appName("SparkETL") \
-        .config("spark.hadoop.fs.s3a.aws.credentials.provider", "com.amazonaws.auth.DefaultAWSCredentialsProviderChain") \
+        .appName("S3SparkIntegration") \
+        .master("local[*]") \
+        .config("spark.hadoop.fs.s3a.access.key", AWS_ACCESS_KEY) \
+        .config("spark.hadoop.fs.s3a.secret.key", AWS_SECRET_KEY) \
         .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
-        .config("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.4") \
-        .master("local[*, 4]") \
+        .config("spark.jars.packages", 
+                "org.apache.hadoop:hadoop-aws:3.3.2,"
+                "com.amazonaws:aws-java-sdk-bundle:1.12.262") \
         .getOrCreate()
     spark.sparkContext.setLogLevel("ERROR")
 
-    s3_bucket_weather_path = "s3a://your_bucket_name/path/to/your_file.csv"
-    s3_bucket_hotels_path = "s3a://your_bucket_name/path/to/your_file.csv"
+    s3_bronze_bucket_weather_path = f"s3a://{BRONZE_BUCKET_NAME}/Weather/"
+    s3_bronze_bucket_hotels_path = f"s3a://{BRONZE_BUCKET_NAME}/Hotels/"
+    s3_silver_bucket_weather_path = f"s3a://{SILVER_BUCKET_NAME}/Weather/"
+    s3_silver_bucket_hotels_path = f"s3a:/{SILVER_BUCKET_NAME}/Hotels/"
 
 
     etl_job = ETL(spark,
-                  hotels_dataset_path="./hotels/",
-                  weather_dataset_path="./weather/year=2016/month=10/")
+                  hotels_dataset_path=s3_bronze_bucket_hotels_path,
+                  weather_dataset_path=s3_bronze_bucket_weather_path,
+                  hotel_df_save_path=s3_silver_bucket_hotels_path,
+                  weather_df_save_path=s3_silver_bucket_weather_path)
     etl_job()
