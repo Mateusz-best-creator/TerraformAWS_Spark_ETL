@@ -1,5 +1,17 @@
 # WORK IN PROGRESS
 
+# TODO
+
+0. Setup AWS Glue: Use crawler to get metadata from bronze bucket, create database and table in which metadata will be stored. Then setup amazon athena so that we will be able to run plain sql queries on bronze s3 bucket.
+
+1. setup aws lambda to run aws step functions workflow when we put object inside data folder in bronze bucket.
+
+2. create step functions workflow and setup EMR cluster to run my spark processing steps, also use SNS service to send notifications to my email.
+
+3. In step functions using spark we load data into s3 bucket. When we load data into S3 silver bucket inside some directory we use simple COPY command to copy the data into AWS Redshift warehouse.
+
+4. Setup Amazon quicksight to create interactive dashboard based on queries ran in redshift.
+
 # Terraform/Spark AWS Mini Project
 
 The goal of this project is to practice the following:

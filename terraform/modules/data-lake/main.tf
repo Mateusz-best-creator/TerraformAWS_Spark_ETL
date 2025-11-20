@@ -1,6 +1,7 @@
 
 resource "aws_s3_bucket" "s3_bronze_bucket" {
   bucket = var.s3_bronze_name
+  force_destroy = true
 
   tags = {
     Name        = "Bronze layer bucket."
@@ -39,6 +40,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_laye
 
 resource "aws_s3_bucket" "s3_silver_bucket" {
   bucket = var.s3_silver_name
+  force_destroy = true
 
   tags = {
     Name        = "Silver layer bucket."
@@ -75,20 +77,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_silver_laye
   }
 }
 
-resource "aws_s3_bucket" "spark_files_for_EMR" {
-  bucket = "spark-scripts-jd7v53c"
+resource "aws_s3_bucket" "general_project_scripts_data" {
+  bucket = "general_scripts_data_38fnvu3nvc0"
+  force_destroy = true
 
   tags = {
-    Name        = "Bucket where we store spark scripts that transforms from bronze to silver layer."
-    Environment = "Dev"
-  }
-}
-
-resource "aws_s3_bucket" "glue_etl_bucket" {
-  bucket = "glue_etl_bucket_asjv73g"
-
-  tags = {
-    Name        = "Bucket where we store aws glue and temp files."
+    Name        = "Bucket where we store helper scripts, logs."
     Environment = "Dev"
   }
 }
