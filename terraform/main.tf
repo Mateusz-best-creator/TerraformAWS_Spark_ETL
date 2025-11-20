@@ -51,6 +51,13 @@ module "data_migration_solution" {
   s3_bronze_arn = module.data_lake_solution.s3_bronze_arn
 }
 
+module "glue_data_exploration_solution" {
+  source = "./modules/glue-data-exploration"
+
+  s3_bronze_name = var.s3_bronze_bucket_name
+  s3_glue_bucket_name = module.data_lake_solution.s3_glue_etl_name
+}
+
 # module "emr_cluster" {
 #   source = "./modules/emr"
 

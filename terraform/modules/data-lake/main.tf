@@ -83,3 +83,12 @@ resource "aws_s3_bucket" "spark_files_for_EMR" {
     Environment = "Dev"
   }
 }
+
+resource "aws_s3_bucket" "glue_etl_bucket" {
+  bucket = "glue_etl_bucket_asjv73g"
+
+  tags = {
+    Name        = "Bucket where we store aws glue and temp files."
+    Environment = "Dev"
+  }
+}

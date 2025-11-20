@@ -4,11 +4,15 @@ from botocore.exceptions import ClientError
 import os
 
 
-def upload_directory_to_s3(root_dir_name, local_dir, bucket_name, s3_client):  
+def upload_directory_to_s3(root_dir_name: str, 
+                           local_dir: str, 
+                           bucket_name: str, 
+                           s3_client: boto3.client):  
     """  
     Uploads an entire directory to an S3 bucket.  
  
     Args:  
+        root_dir_name (str): Root name of the directory inside s3 where given files will be stored.
         local_dir (str): Path to the local directory to upload.  
         bucket_name (str): Name of the S3 bucket.  
         s3_client (boto3.client): Initialized S3 client.  

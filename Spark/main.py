@@ -3,6 +3,8 @@ from transformations import Transformations
 from typing import Literal
 from encryption import Encryption
 from pyspark.sql.types import StringType, DoubleType
+import os
+from dotenv import load_dotenv 
 
 class ETL:
 
@@ -48,13 +50,13 @@ class ETL:
         # self.hotels_df = transformations.add_geohash(self.hotels_df)
         # self.weather_df = transformations.filter_geohash(self.weather_df)
         # self.hotels_df = transformations.filter_geohash(self.hotels_df)
-        print(f"After imputing2")
-        self.hotels_df.show(5)
-        self.weather_df.show(5)
-        print(f"\n\n\nStarting grouping transformations\n\n\n")
-        # self.weather_df = transformations.group_weather_dataset(self.weather_df)
+        # print(f"After imputing2")
         # self.hotels_df.show(5)
         # self.weather_df.show(5)
+        # print(f"\n\n\nStarting grouping transformations\n\n\n")
+        # self.weather_df = transformations.group_weather_dataset(self.weather_df)
+        self.hotels_df.show(5)
+        self.weather_df.show(5)
 
         encryption_class = Encryption()
         self.hotels_df = encryption_class.encrypt_data(self.hotels_df,
@@ -113,7 +115,18 @@ if __name__ == "__main__":
     s3_bronze_bucket_weather_path = f"s3a://{BRONZE_BUCKET_NAME}/Weather/"
     s3_bronze_bucket_hotels_path = f"s3a://{BRONZE_BUCKET_NAME}/Hotels/"
     s3_silver_bucket_weather_path = f"s3a://{SILVER_BUCKET_NAME}/Weather/"
-    s3_silver_bucket_hotels_path = f"s3a:/{SILVER_BUCKET_NAME}/Hotels/"
+    s3_silver_bucket_hotels_path = f"s3a://{SILVER_BUCKET_NAME}/Hotels/"
+
+    # spark = SparkSession.builder \
+    #     .appName("S3SparkIntegration") \
+    #     .master("local[*]") \
+    #     .getOrCreate()
+    # spark.sparkContext.setLogLevel("ERROR")
+
+    # s3_bronze_bucket_hotels_path = f"./hotels/"
+    # s3_bronze_bucket_weather_path = f"./weather/year=2016/month=10/"
+    # s3_silver_bucket_weather_path = f"./cleaned_data/weather"
+    # s3_silver_bucket_hotels_path = f"./cleaned_data/hotels"
 
 
     etl_job = ETL(spark,
