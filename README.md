@@ -1,3 +1,5 @@
+# WORK IN PROGRESS
+
 # Terraform/Spark AWS Mini Project
 
 The goal of this project is to practice the following:
