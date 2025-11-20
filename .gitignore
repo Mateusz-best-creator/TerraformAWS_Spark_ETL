@@ -301,3 +301,4 @@ Spark/weather
 cleaned_data
 temp.py
 *.jar
+./Spark/jar_files/*
