@@ -25,8 +25,8 @@ resource "aws_iam_policy_attachment" "glue_s3_access" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
-resource "aws_glue_catalog_database" "hotel_weather_db" {
-  name = "glue_hotel_weather_db"
+resource "aws_glue_catalog_database" "equity_db" {
+  name = "glue_equity_db"
 }
 
 resource "aws_glue_crawler" "crawler" {
@@ -40,13 +40,17 @@ resource "aws_glue_crawler" "crawler" {
   }
 }
 
-resource "aws_glue_job" "glue_equity_etfs_job" {
-  name        = "glue_equity_etfs_job"
-  role_arn    = aws_iam_role.glue_role.arn
+# Due to this error: failed to execute with exception Given GlueVersion [5.0] is not valid.
+# This does not work and I cannot fix this.
+# But it works with version 5.0 via management console so I did it there :).
+# resource "aws_glue_job" "glue_equity_etfs_job" {
+#   name        = "glue_equity_etfs_job"
+#   role_arn    = aws_iam_role.glue_role.arn
+#   glue_version = "5.0"
 
-  command {
-    name            = "glue_job"
-    script_location = "s3://${var.s3_general_utility_name}/scripts/glue_etl_script.py.py"
-    python_version  = "3"
-  }
-}
+#   command {
+#     name            = "glue_job"
+#     script_location = "s3://${var.s3_general_utility_name}/scripts/glue_etl_script.py"
+#     python_version  = "3"
+#   }
+# }
