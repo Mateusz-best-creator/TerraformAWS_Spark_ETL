@@ -3,7 +3,7 @@ variable "s3_bronze_name" {
     description = "Bronze bucket name"
 }
 
-variable "s3_glue_bucket_name" {
+variable "s3_general_utility_name" {
     type = string
     description = "AWS glue bucket name."
 }

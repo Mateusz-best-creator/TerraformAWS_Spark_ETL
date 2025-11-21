@@ -13,6 +13,12 @@ resource "aws_iam_role" "glue_role" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "glue_service_role" {
+  role       = aws_iam_role.glue_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSGlueServiceRole"
+}
+
+
 resource "aws_iam_policy_attachment" "glue_s3_access" {
   name       = "glue-s3-access"
   roles      = [aws_iam_role.glue_role.name]
@@ -29,17 +35,18 @@ resource "aws_glue_crawler" "crawler" {
   role          = aws_iam_role.glue_role.arn
 
   s3_target {
-    path = "s3://${var.s3_bronze_name}"
+    path = "s3://${var.s3_bronze_name}/Equity_ETFs/"
+    exclusions = [ "Hotels", "Weather", "Hotels/*", "Weather/*"]
   }
 }
 
-resource "aws_glue_job" "glue_hotel_weather_etl_job" {
-  name        = "glue_hotel_weather_etl_job"
+resource "aws_glue_job" "glue_equity_etfs_job" {
+  name        = "glue_equity_etfs_job"
   role_arn    = aws_iam_role.glue_role.arn
 
   command {
-    name            = "glue_etl"
-    script_location = "s3://${var.s3_glue_bucket_name}/scripts/etl_script.py"
+    name            = "glue_job"
+    script_location = "s3://${var.s3_general_utility_name}/scripts/glue_etl_script.py.py"
     python_version  = "3"
   }
 }

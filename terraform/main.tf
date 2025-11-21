@@ -52,9 +52,9 @@ module "data_lake_solution" {
 #   s3_bronze_arn = module.data_lake_solution.s3_bronze_arn
 # }
 
-# module "glue_data_exploration_solution" {
-#   source = "./modules/glue-data-exploration"
+module "glue_data_exploration_solution" {
+  source = "./modules/glue-data-exploration"
 
-#   s3_bronze_name      = var.s3_bronze_bucket_name
-#   s3_glue_bucket_name = var.s3_general_bucket_name
-# }
+  s3_bronze_name      = var.s3_bronze_bucket_name
+  s3_general_utility_name = var.s3_general_bucket_name
+}
