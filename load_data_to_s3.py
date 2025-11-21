@@ -64,3 +64,7 @@ if __name__ == "__main__":
                            "./GlueScripts",
                            bucket_name="general-utility-38fnvu3nvc0",
                            s3_client=boto_client)
+    upload_directory_to_s3("LambdaScripts",
+                           "./LambdaScripts",
+                           bucket_name="general-utility-38fnvu3nvc0",
+                           s3_client=boto_client)

@@ -51,6 +51,5 @@ resource "aws_glue_crawler" "crawler" {
 #   command {
 #     name            = "glue_job"
 #     script_location = "s3://${var.s3_general_utility_name}/scripts/glue_etl_script.py"
-#     python_version  = "3"
 #   }
 # }
