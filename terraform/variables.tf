@@ -19,3 +19,8 @@ variable "s3_silver_bucket_name" {
   type    = string
   default = "silver-u3b9rvg"
 }
+
+variable "s3_general_bucket_name" {
+  type    = string
+  default = "general-utility-38fnvu3nvc0"
+}

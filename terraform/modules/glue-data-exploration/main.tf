@@ -24,9 +24,9 @@ resource "aws_glue_catalog_database" "hotel_weather_db" {
 }
 
 resource "aws_glue_crawler" "crawler" {
-  database_name = aws_glue_catalog_database.example.name
+  database_name = aws_glue_catalog_database.hotel_weather_db.name
   name          = "weather-hotels-crawler"
-  role          = aws_iam_role.example.arn
+  role          = aws_iam_role.glue_role.arn
 
   s3_target {
     path = "s3://${var.s3_bronze_name}"

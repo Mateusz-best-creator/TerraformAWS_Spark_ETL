@@ -8,7 +8,7 @@ output "s3_silver_arn" {
   description = "ARN of the silver bucket."
 }
 
-output "s3_glue_etl_name" {
-  value = aws_s3_bucket.glue_etl_bucket.name
-  description = "Name of the glue bucket."
+output "s3_general_arn" {
+  value = aws_s3_bucket.general_utility.arn
+  description = "ARN of the glue bucket."
 }

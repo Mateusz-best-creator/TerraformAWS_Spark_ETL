@@ -77,12 +77,12 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_silver_laye
   }
 }
 
-resource "aws_s3_bucket" "general_project_scripts_data" {
-  bucket = "general_scripts_data_38fnvu3nvc0"
+resource "aws_s3_bucket" "general_utility" {
+  bucket = var.s3_general_name
   force_destroy = true
 
   tags = {
-    Name        = "Bucket where we store helper scripts, logs."
+    Name        = "Utility bucket"
     Environment = "Dev"
   }
 }
