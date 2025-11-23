@@ -30,8 +30,12 @@ The architecture will look as follows:
 
 1. First, run: `aws configure --profile terraform`. This will prompt you to enter your access key ID and secret access key. Remember never to share these keys with anyone! After completing this step, you can inspect your `.aws` folder and confirm that your credentials are stored there. This configuration allows Terraform to communicate with your AWS account.
 
-2. Create the infrastructure:
+2. Create the terraform infrastructure:
 
     - `terraform init`
     - `terraform plan -out terraform.plan`
     - `terraform apply terraform.plan`
+
+3. Upload data to the buckets:
+
+    - Run `load_data_to_s3.py` python file that uses boto3 to communicate with aws client and uploads initial data to the bronze bucket.

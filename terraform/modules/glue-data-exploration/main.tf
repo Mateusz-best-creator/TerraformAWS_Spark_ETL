@@ -30,7 +30,7 @@ resource "aws_glue_catalog_database" "equity_db" {
 }
 
 resource "aws_glue_crawler" "crawler" {
-  database_name = aws_glue_catalog_database.hotel_weather_db.name
+  database_name = aws_glue_catalog_database.equity_db.name
   name          = "weather-hotels-crawler"
   role          = aws_iam_role.glue_role.arn
 

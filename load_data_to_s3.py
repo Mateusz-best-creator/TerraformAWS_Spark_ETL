@@ -48,14 +48,14 @@ def upload_directory_to_s3(root_dir_name: str,
 
 if __name__ == "__main__":
     boto_client = boto3.client("s3")
-    upload_directory_to_s3("Hotels",
-                           "./Spark/hotels", 
-                           bucket_name="bronze-u3ra6oa", 
-                           s3_client=boto_client)
-    upload_directory_to_s3("Weather",
-                           "./Spark/weather/year=2016/month=10/", 
-                           bucket_name="bronze-u3ra6oa", 
-                           s3_client=boto_client)
+    # upload_directory_to_s3("Hotels",
+    #                        "./Spark/hotels", 
+    #                        bucket_name="bronze-u3ra6oa", 
+    #                        s3_client=boto_client)
+    # upload_directory_to_s3("Weather",
+    #                        "./Spark/weather/year=2016/month=10/", 
+    #                        bucket_name="bronze-u3ra6oa", 
+    #                        s3_client=boto_client)
     upload_directory_to_s3("Equity_ETFs",
                            "./Spark/equity_data",
                            bucket_name="bronze-u3ra6oa",

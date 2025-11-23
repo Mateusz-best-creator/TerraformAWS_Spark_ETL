@@ -31,14 +31,6 @@ resource "aws_s3_account_public_access_block" "state_public_access" {
   restrict_public_buckets = true
 }
 
-module "data_lake_solution" {
-  source = "./modules/data-lake"
-
-  s3_bronze_name  = var.s3_bronze_bucket_name
-  s3_silver_name  = var.s3_silver_bucket_name
-  s3_general_name = var.s3_general_bucket_name
-}
-
 # module "databases_solution" {
 #   source = "./modules/databases"
 
@@ -57,4 +49,20 @@ module "glue_data_exploration_solution" {
 
   s3_bronze_name      = var.s3_bronze_bucket_name
   s3_general_utility_name = var.s3_general_bucket_name
+}
+
+module "lambda_functions_solution" {
+  source = "./modules/lambda-functions"
+
+  
+}
+
+module "data_lake_solution" {
+  source = "./modules/data-lake"
+
+  s3_bronze_name  = var.s3_bronze_bucket_name
+  s3_silver_name  = var.s3_silver_bucket_name
+  s3_general_name = var.s3_general_bucket_name
+
+  lambda_trigger_glue_equity_arn = module.lambda_functions_solution.lambda_glue_job_arn
 }

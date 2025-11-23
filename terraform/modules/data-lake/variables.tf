@@ -12,3 +12,8 @@ variable "s3_general_name" {
   description = "Name of the utility bucket where we store scripts, logs."
   type = string
 }
+
+variable "lambda_trigger_glue_equity_arn" {
+  type = string
+  description = "ARN value of the lambda function used to start GLUE job."
+}

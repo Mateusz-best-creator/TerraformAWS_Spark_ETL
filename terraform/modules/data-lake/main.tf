@@ -38,6 +38,28 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_laye
   }
 }
 
+resource "aws_lambda_permission" "allow_bucket" {
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = var.lambda_trigger_glue_equity_arn
+  principal     = "s3.amazonaws.com"
+  source_arn    = aws_s3_bucket.s3_bronze_bucket.arn
+}
+
+
+# resource "aws_s3_bucket_notification" "upload_equity_data" {
+#   bucket = var.s3_bronze_name
+
+#   lambda_function {
+#     lambda_function_arn = var.lambda_trigger_glue_equity_arn
+#     events              = ["s3:ObjectCreated:Put"]
+#     filter_prefix       = "Equity_ETFs/"
+#     filter_suffix = ".csv"
+#   }
+
+#   depends_on = [aws_lambda_permission.allow_bucket]
+# }
+
 resource "aws_s3_bucket" "s3_silver_bucket" {
   bucket = var.s3_silver_name
   force_destroy = true
