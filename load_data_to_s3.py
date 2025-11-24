@@ -68,3 +68,7 @@ if __name__ == "__main__":
                            "./LambdaScripts",
                            bucket_name="general-utility-38fnvu3nvc0",
                            s3_client=boto_client)
+    upload_directory_to_s3("Equity_ETFs",
+                            "./DataGenerationScripts",
+                            bucket_name="silver-u3b9rvg",
+                            s3_client=boto_client)

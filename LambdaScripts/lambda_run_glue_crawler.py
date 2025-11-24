@@ -24,6 +24,3 @@ def lambda_handler(event, context):
     )
     logger.info('## STARTED LAMBDA FUNCTION: ' + lambda_name)
     return response_glue
-
-general-utility-38fnvu3nvc0, key: scripts/glue_etl_script.py
-s3://general-utility-38fnvu3nvc0/GlueETLScript/glue_etl_script.py
