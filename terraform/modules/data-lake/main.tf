@@ -47,18 +47,18 @@ resource "aws_lambda_permission" "allow_bucket" {
 }
 
 
-# resource "aws_s3_bucket_notification" "upload_equity_data" {
-#   bucket = aws_s3_bucket.s3_bronze_bucket.arn
+resource "aws_s3_bucket_notification" "upload_equity_data" {
+  bucket = var.s3_bronze_name
 
-#   lambda_function {
-#     lambda_function_arn = var.lambda_run_glue_crawler_arn
-#     events              = ["s3:ObjectCreated:Put"]
-#     filter_prefix       = "Equity_ETFs/"
-#     filter_suffix = ".csv"
-#   }
+  lambda_function {
+    lambda_function_arn = var.lambda_run_glue_crawler_arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_prefix       = "Equity_ETFs/"
+    filter_suffix = ".csv"
+  }
 
-#   depends_on = [aws_lambda_permission.allow_bucket, aws_s3_bucket.s3_bronze_bucket]
-# }
+  depends_on = [aws_lambda_permission.allow_bucket, aws_s3_bucket.s3_bronze_bucket]
+}
 
 resource "aws_s3_bucket" "s3_silver_bucket" {
   bucket = var.s3_silver_name

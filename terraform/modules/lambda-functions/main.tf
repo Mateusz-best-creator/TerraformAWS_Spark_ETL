@@ -13,10 +13,53 @@ data "aws_iam_policy_document" "assume_role" {
 }
 
 resource "aws_iam_role" "lambda_role" {
-  name               = "lambda_execution_role"
+  name               = "lambda-execution-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
+resource "aws_iam_policy" "lambda_glue_policy" {
+  name = "lambda-glue-policy"
+  description = "policy to allow aws lambda call aws glue crawler"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        "Action" = [
+          "glue:StartCrawler",
+          "glue:GetCrawler",
+        ]
+        "Effect"="Allow"
+        "Resource": "arn:aws:glue:eu-central-1:538780774653:crawler/etfs-equity-crawler"
+      },
+      {
+        "Action" = [
+          "glue:StartJobRun"
+        ]
+        "Effect"="Allow"
+        "Resource": "arn:aws:glue:eu-central-1:538780774653:job/EquityDataPreparation"
+      },
+      {
+        "Effect": "Allow",
+        "Action": [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        "Resource": "*"
+		  }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_policy_attachement" {
+  role = aws_iam_role.lambda_role.name
+  policy_arn = aws_iam_policy.lambda_glue_policy.arn
+}
+
+##########################################
+# Definition of lambda functions resources
+##########################################
 data "archive_file" "equity_lambda_crawler_zip" {
   type        = "zip"
   source_file = "${path.root}/../LambdaScripts/lambda_run_glue_crawler.py"
