@@ -1,0 +1,94 @@
+{
+  "Comment": "An example of the Amazon States Language using a choice state.",
+  "QueryLanguage": "JSONata",
+  "StartAt": "Create an EMR cluster",
+
+    "Create an EMR cluster": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::elasticmapreduce:createCluster.sync",
+      "Parameters": {
+        "Name": "SparkCluster",
+        "VisibleToAllUsers": true,
+        "ReleaseLabel": "emr-6.3.0",
+        "Applications": [
+          {
+            "Name": "Spark"
+          }
+        ],
+        "ServiceRole": "EMRDefaultRole",
+        "JobFlowRole": "EMREC2InstanceProfile",
+        "LogUri": "s3://general-utility-38fnvu3nvc0/Logs/",
+        "Instances": {
+          "Ec2SubnetId": "",
+          "KeepJobFlowAliveWhenNoSteps": true,
+          "InstanceFleets": [
+            {
+              "Name": "MyLeaderFleet",
+              "InstanceFleetType": "MASTER",
+              "TargetOnDemandCapacity": 1,
+              "InstanceTypeConfigs": [
+                {
+                  "InstanceType": "m5.xlarge"
+                }
+              ]
+            },
+            {
+              "Name": "MyCoreFleet",
+              "InstanceFleetType": "CORE",
+              "TargetOnDemandCapacity": 2,
+              "InstanceTypeConfigs": [
+                {
+                  "InstanceType": "m5.xlarge"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "ResultPath": "$.cluster",
+      "Next": "Submit PySpark Job"
+    },
+    "Submit PySpark Job": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::elasticmapreduce:addStep.sync",
+      "Parameters": {
+        "ClusterId.$": "$.cluster.ClusterId",
+        "Step": {
+          "Name": "pyspark-job",
+          "HadoopJarStep": {
+            "Jar": "command-runner.jar",
+            "Args": [
+              "spark-submit",
+              "--deploy-mode",
+              "cluster",
+              "--executor-memory",
+              "1g",
+              "s3://general-utility-38fnvu3nvc0/EMRScripts/main.py"
+            ]
+          }
+        }
+      },
+      "ResultPath": "$.sparkJob",
+      "Next": "Terminate Cluster"
+    },
+    "Terminate the EMR Cluster": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::elasticmapreduce:terminateCluster",
+      "Parameters": {
+        "ClusterId.$": "$.cluster.ClusterId"
+      },
+      "ResultPath": "$.terminateCluster",
+      "Next": "Send message with Amazon SNS"
+    },
+    "Send message with Amazon SNS": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::sns:publish",
+      "Parameters": {
+        "TopicArn": "",
+        "Message": {
+          "Input": "The Task is complete!"
+        }
+      },
+      "End": true
+    }
+}

@@ -66,4 +66,5 @@ module "data_lake_solution" {
 
   lambda_trigger_glue_equity_arn = module.lambda_functions_solution.lambda_glue_job_arn
   lambda_run_glue_crawler_arn = module.lambda_functions_solution.lambda_glue_crawler_arn
+  lambda_run_sf_workflow_arn = module.lambda_functions_solution.lambda_sf_workflow_arn
 }
