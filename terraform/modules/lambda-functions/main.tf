@@ -64,9 +64,9 @@ resource "aws_iam_role_policy_attachment" "lambda_policy_attachement" {
   policy_arn = aws_iam_policy.lambda_glue_policy.arn
 }
 
-##########################################
-# Definition of lambda functions resources
-##########################################
+#######################################################
+# Definition of lambda functions resources for aws glue
+#######################################################
 data "archive_file" "equity_lambda_crawler_zip" {
   type        = "zip"
   source_file = "${path.root}/../LambdaScripts/lambda_run_glue_crawler.py"
@@ -103,6 +103,80 @@ resource "aws_lambda_function" "RunEquityGlueJob" {
   function_name    = "RunEquityGlueJob"
   handler          = "lambda_run_glue_job.lambda_handler"
   role             = aws_iam_role.lambda_role.arn
+  runtime          = "python3.13"
+
+  environment {
+    variables = {
+      ENVIRONMENT = "dev"
+      LOG_LEVEL   = "info"
+    }
+  }
+
+  tags = {
+    Environment = "dev"
+  }
+}
+
+######################################################
+# Lambda function for starting step functions workflow
+######################################################
+
+resource "aws_iam_role" "lambda_step_functions_role" {
+  name = "call-step-functions-workflow"
+    assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = ""
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
+      },
+    ]
+  })
+
+  tags = {
+    Environment = "dev"
+  }
+}
+
+resource "aws_iam_policy" "lambda_step_functions_policy" {
+  name        = "lambda_step_functions_policy"
+  description = "Policy that will allow lambda function call step functions workflow."
+
+  # Terraform expression result to valid JSON syntax.
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ec2:Describe*",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_sf_policy_attachement" {
+  role = aws_iam_role.lambda_step_functions_role.name
+  policy_arn = aws_iam_policy.lambda_step_functions_policy.arn
+}
+
+data "archive_file" "step_function_lambda" {
+  type        = "zip"
+  source_file = "${path.root}/../LambdaScripts/lambda_run_sf_workflow.py"
+  output_path = "${path.module}/build/lambda_run_sf_workflow.zip"
+}
+
+resource "aws_lambda_function" "RunStepFunctionWorkflow" {
+  filename = data.archive_file.step_function_lambda.output_path
+  function_name = "RunStepFunctionWorkflow"
+  handler = "lambda_run_step_function_workflow.lambda_handler"
+  role = aws_iam_role.lambda_step_functions_role.arn
   runtime          = "python3.13"
 
   environment {

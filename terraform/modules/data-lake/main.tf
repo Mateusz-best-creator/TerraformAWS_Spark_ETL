@@ -57,7 +57,19 @@ resource "aws_s3_bucket_notification" "upload_equity_data" {
     filter_suffix = ".csv"
   }
 
-  depends_on = [ aws_s3_bucket.s3_bronze_bucket, aws_lambda_permission.allow_bucket]
+  depends_on = [aws_s3_bucket.s3_bronze_bucket, aws_lambda_permission.allow_bucket]
+}
+
+resource "aws_s3_bucket_notification" "upload_hotel_weather_data" {
+  bucket = var.s3_bronze_name
+
+  lambda_function {
+    lambda_function_arn = var.lambda_run_sf_workflow_arn
+    events = ["s3:ObjectCreated:*"]
+    filter_prefix = "HotelWeather/"
+  }
+
+  depends_on = [aws_s3_bucket.s3_bronze_bucket, aws_lambda_permission.allow_bucket]
 }
 
 resource "aws_s3_bucket" "s3_silver_bucket" {

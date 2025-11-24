@@ -22,3 +22,8 @@ variable "lambda_run_glue_crawler_arn" {
   type = string
   description = "ARN value of the lambda function used to start GLUE crawler."
 }
+
+variable "lambda_run_sf_workflow_arn" {
+  type = string
+  description = "ARN value of the lambda function to start sf workflow."
+}
