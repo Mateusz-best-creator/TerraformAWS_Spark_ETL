@@ -40,6 +40,13 @@ resource "aws_iam_policy" "lambda_glue_policy" {
         "Resource": "arn:aws:glue:eu-central-1:538780774653:job/EquityDataPreparation"
       },
       {
+        "Effect" = "Allow"
+        "Action" = [
+          "lambda:InvokeFunction"
+        ]
+        "Resource" = "arn:aws:lambda:eu-central-1:538780774653:function:RunEquityGlueJob"
+      },
+      {
         "Effect": "Allow",
         "Action": [
           "logs:CreateLogGroup",

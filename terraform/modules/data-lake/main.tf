@@ -41,7 +41,7 @@ resource "aws_s3_bucket_lifecycle_configuration" "data_lifecycle_for_bronze_laye
 resource "aws_lambda_permission" "allow_bucket" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = var.lambda_trigger_glue_equity_arn
+  function_name = var.lambda_run_glue_crawler_arn
   principal     = "s3.amazonaws.com"
   source_arn    = aws_s3_bucket.s3_bronze_bucket.arn
 }
@@ -57,7 +57,7 @@ resource "aws_s3_bucket_notification" "upload_equity_data" {
     filter_suffix = ".csv"
   }
 
-  depends_on = [aws_lambda_permission.allow_bucket, aws_s3_bucket.s3_bronze_bucket]
+  depends_on = [ aws_s3_bucket.s3_bronze_bucket, aws_lambda_permission.allow_bucket]
 }
 
 resource "aws_s3_bucket" "s3_silver_bucket" {
