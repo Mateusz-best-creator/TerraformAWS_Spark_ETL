@@ -84,7 +84,7 @@
       "Type": "Task",
       "Resource": "arn:aws:states:::sns:publish",
       "Parameters": {
-        "TopicArn": "",
+/        "TopicArn": "",
         "Message": {
           "Input": "The Task is complete!"
         }
